@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Motors - Catálogo de Automóviles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #433d97;
+            --primary-hover: #5149b0;
+            --bg-dark: #0f1117;
+            --bg-card: #1a1d26;
+            --bg-input: #252936;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #2e3445;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        header {
+            background-color: rgba(15, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar {
+            max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        .logo i, .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .header-actions { display: flex; align-items: center; gap: 1rem; }
+        .cart-btn {
+            position: relative; background: var(--bg-input); border: 1px solid var(--border-color);
+            color: #fff; padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer;
+            font-size: 1rem; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .cart-btn:hover { border-color: var(--primary); }
+        .cart-count {
+            background: var(--primary); color: white; font-size: 0.75rem; font-weight: bold;
+            padding: 0.2rem 0.5rem; border-radius: 50%; min-width: 1.4rem; text-align: center;
+        }
+
+        .hero {
+            position: relative; padding: 5rem 1.5rem 7rem;
+            background: linear-gradient(rgba(15,17,23,0.85), rgba(15,17,23,0.95)),
+                url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1600') center/cover no-repeat;
+            text-align: center;
+        }
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { color: var(--text-muted); font-size: 1.1rem; }
+
+        .search-container {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            padding: 1.5rem; border-radius: 12px; max-width: 1100px;
+            margin: -3rem auto 0; position: relative; z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .search-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;
+        }
+        .form-group select, .form-group input {
+            width: 100%; padding: 0.8rem 1rem; background: var(--bg-input);
+            border: 1px solid var(--border-color); border-radius: 8px; color: #fff;
+            outline: none; font-size: 0.95rem; transition: border-color 0.3s;
+        }
+        .form-group select:focus, .form-group input:focus { border-color: var(--primary); }
+        .btn-search, .btn-clear-search {
+            border: none; border-radius: 8px; padding: 0.8rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 0.5rem;
+        }
+        .btn-search { background: var(--primary); color: white; }
+        .btn-search:hover { background: var(--primary-hover); }
+        .btn-clear-search {
+            background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
+        }
+        .btn-clear-search:hover { border-color: var(--danger); color: var(--danger); }
+
+        .features {
+            max-width: 1200px; margin: 4rem auto; padding: 0 1.5rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;
+        }
+        .feature-box {
+            background: var(--bg-card); padding: 1.5rem; border-radius: 10px;
+            border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1.2rem;
+        }
+        .feature-box i { font-size: 2rem; color: var(--primary); }
+        .feature-box h4 { font-size: 1.1rem; margin-bottom: 0.2rem; }
+        .feature-box p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .products-section { max-width: 1200px; margin: 4rem auto; padding: 0 1.5rem; }
+        .section-title {
+            font-size: 2rem; margin-bottom: 0.5rem;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .section-title span { color: var(--primary); }
+        .results-info { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;
+        }
+        .product-card {
+            width: 100%; min-width: 0; background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s; cursor: pointer;
+        }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .product-img { width: 100%; height: 190px; object-fit: cover; background: #252936; }
+        .product-info { padding: 1.2rem; }
+        .product-category {
+            font-size: 0.75rem; text-transform: uppercase; color: var(--primary); font-weight: 700;
+        }
+        .product-title {
+            font-size: 1.15rem; font-weight: 700; margin: 0.3rem 0;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .product-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+        .product-specs {
+            display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-muted);
+        }
+        .product-specs span {
+            background: var(--bg-input); padding: 0.25rem 0.55rem; border-radius: 6px;
+        }
+        .product-bottom {
+            display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+        }
+        .product-price { font-size: 1.25rem; font-weight: 800; color: var(--success); }
+        .add-cart {
+            background: var(--primary); border: none; color: white;
+            padding: 0.6rem 0.8rem; border-radius: 7px; cursor: pointer; transition: 0.3s;
+        }
+        .add-cart:hover { background: var(--primary-hover); }
+        .no-results {
+            grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-muted);
+        }
+        .no-results i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; display: block; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center; z-index: 2000;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; padding: 1rem;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 16px; max-width: 780px; width: 100%; max-height: 90vh;
+            overflow-y: auto; position: relative; transform: translateY(20px); transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal { transform: translateY(0); }
+        .modal-close {
+            position: absolute; top: 1rem; right: 1rem; background: var(--bg-input);
+            border: 1px solid var(--border-color); color: var(--text-light);
+            width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s; z-index: 10;
+        }
+        .modal-close:hover { border-color: var(--danger); color: var(--danger); }
+
+        .detail-content { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        .detail-img { width: 100%; height: 100%; min-height: 300px; object-fit: cover; background: #252936; }
+        .detail-info { padding: 2rem; display: flex; flex-direction: column; }
+        .detail-category { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; }
+        .detail-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem; }
+        .detail-code { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .detail-fit { font-size: 0.9rem; color: var(--primary); margin-bottom: 1rem; font-weight: 600; }
+        .detail-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; flex-grow: 1; margin-bottom: 1.5rem; }
+        .detail-price { font-size: 1.8rem; font-weight: 800; color: var(--success); margin-bottom: 1.2rem; }
+        .btn-add-detail {
+            background: var(--primary); color: white; border: none; border-radius: 10px;
+            padding: 0.9rem 1.5rem; font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+        }
+        .btn-add-detail:hover { background: var(--primary-hover); }
+
+        .cart-modal { max-width: 480px; }
+        .cart-header {
+            padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .cart-header h3 { font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem; }
+        .cart-body { padding: 1rem 1.5rem; max-height: 50vh; overflow-y: auto; }
+        .cart-empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); }
+        .cart-empty i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+        .cart-item {
+            display: flex; align-items: center; gap: 1rem; padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item-info { flex-grow: 1; min-width: 0; }
+        .cart-item-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cart-item-price { color: var(--success); font-weight: 700; font-size: 0.9rem; }
+        .btn-remove {
+            background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
+            width: 34px; height: 34px; border-radius: 8px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s; flex-shrink: 0;
+        }
+        .btn-remove:hover { border-color: var(--danger); color: var(--danger); background: rgba(239,68,68,0.1); }
+        .cart-footer { padding: 1rem 1.5rem 1.5rem; border-top: 1px solid var(--border-color); }
+        .cart-total {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; font-size: 1.15rem; font-weight: 700;
+        }
+        .cart-total span:last-child { color: var(--success); }
+        .cart-actions { display: flex; gap: 0.8rem; }
+        .btn-clear {
+            flex: 1; background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-muted); padding: 0.75rem; border-radius: 8px; cursor: pointer;
+            font-weight: 600; transition: 0.3s;
+        }
+        .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+        .btn-checkout {
+            flex: 2; background: var(--primary); border: none; color: white;
+            padding: 0.75rem; border-radius: 8px; cursor: pointer; font-weight: 700;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-checkout:hover { background: var(--primary-hover); }
+
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--bg-card); border: 1px solid var(--success); color: var(--text-light);
+            padding: 0.9rem 1.5rem; border-radius: 10px; display: flex; align-items: center;
+            gap: 0.7rem; z-index: 3000; opacity: 0; transition: transform 0.35s, opacity 0.35s;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast i { color: var(--success); }
+
+        footer {
+            margin-top: 5rem; background: #0a0c11; border-top: 1px solid var(--border-color);
+            padding: 3rem 1.5rem; text-align: center;
+        }
+        footer h3 { margin-bottom: 0.8rem; }
+        footer p { color: var(--text-muted); font-size: 0.9rem; }
+        .social-icons { margin-top: 1.5rem; display: flex; justify-content: center; gap: 1rem; }
+        .social-icons a {
+            width: 40px; height: 40px; border: 1px solid var(--border-color); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s;
+        }
+        .social-icons a:hover { color: var(--primary); border-color: var(--primary); }
+
+        @media (max-width: 768px) {
+            .navbar { flex-wrap: wrap; gap: 1rem; }
+            .nav-links { order: 3; width: 100%; justify-content: center; gap: 1rem; }
+            .hero h1 { font-size: 2rem; }
+            .section-title { font-size: 1.5rem; }
+            .detail-content { grid-template-columns: 1fr; }
+            .detail-img { min-height: 200px; max-height: 240px; }
+        }
+        @media (max-width: 500px) {
+            .nav-links { display: none; }
+            .header-actions { margin-left: auto; }
+            .hero { padding-top: 4rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .search-container { margin-top: -2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-car"></i>
+            <span>Legacy</span> Motors
+        </a>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#productos">Catálogo</a></li>
+            <li><a href="#beneficios">Beneficios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="pedidos.html">Solicitar</a></li>
+        </ul>
+        <div class="header-actions">
+            <button class="cart-btn" onclick="abrirCarrito()">
+                <i class="fas fa-heart"></i> Intereses
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+            <a href="pedidos.html" class="cart-btn"><i class="fas fa-file-invoice"></i> Solicitar</a>
+        </div>
+    </nav>
+</header>
+
+<section class="hero" id="inicio">
+    <div class="hero-content">
+        <h1>Encuentra tu próximo <span>automóvil</span></h1>
+        <p>Catálogo de vehículos nuevos y usados con garantía, precios competitivos y financiamiento disponible.</p>
+    </div>
+</section>
+
+<section class="search-container">
+    <div class="search-grid">
+        <div class="form-group">
+            <select id="marca">
+                <option value="">Todas las marcas</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Nissan">Nissan</option>
+                <option value="Ford">Ford</option>
+                <option value="Chevrolet">Chevrolet</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Kia">Kia</option>
+                <option value="Mazda">Mazda</option>
+                <option value="Volkswagen">Volkswagen</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="text" id="modelo" placeholder="Modelo (ej: Corolla, Civic...)">
+        </div>
+        <div class="form-group">
+            <select id="anio">
+                <option value="">Cualquier año</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019 o anterior</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="tipo">
+                <option value="">Todos los tipos</option>
+                <option value="Sedán">Sedán</option>
+                <option value="SUV">SUV</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Coupé">Coupé</option>
+            </select>
+        </div>
+        <button class="btn-search" onclick="buscarVehiculo()">
+            <i class="fas fa-search"></i> Buscar
+        </button>
+        <button class="btn-clear-search" onclick="limpiarBusqueda()">
+            <i class="fas fa-times"></i> Limpiar
+        </button>
+    </div>
+</section>
+
+<section class="features" id="beneficios">
+    <div class="feature-box">
+        <i class="fas fa-shield-halved"></i>
+        <div><h4>Garantía incluida</h4><p>Todos nuestros vehículos cuentan con garantía mecánica.</p></div>
+    </div>
+    <div class="feature-box">
+        <i class="fas fa-hand-holding-dollar"></i>
+        <div><h4>Financiamiento</h4><p>Opciones de crédito flexibles y tasas competitivas.</p></div>
+    </div>
+    <div class="feature-box">
+        <i class="fas fa-car-side"></i>
+        <div><h4>Inspección completa</h4><p>Cada auto pasa por una revisión de más de 100 puntos.</p></div>
+    </div>
+    <div class="feature-box">
+        <i class="fas fa-headset"></i>
+        <div><h4>Asesoría personalizada</h4><p>Te ayudamos a encontrar el vehículo ideal.</p></div>
+    </div>
+</section>
+
+<section class="products-section" id="productos">
+    <h2 class="section-title">Vehículos <span>disponibles</span></h2>
+    <p class="results-info" id="results-info">Mostrando todos los vehículos</p>
+    <div class="products-grid" id="products-grid"></div>
+</section>
+
+<footer id="contacto">
+    <h3>Legacy Motors</h3>
+    <p>Tu próximo automóvil te está esperando</p>
+    <div class="social-icons">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+    <p style="margin-top: 1.5rem;">© 2026 Legacy Motors</p>
+</footer>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal-detalle">
+    <div class="modal">
+        <button class="modal-close" onclick="cerrarModal('modal-detalle')"><i class="fas fa-times"></i></button>
+        <div class="detail-content" id="detail-content"></div>
+    </div>
+</div>
+
+<!-- MODAL CARRITO / INTERESES -->
+<div class="modal-overlay" id="modal-carrito">
+    <div class="modal cart-modal">
+        <div class="cart-header">
+            <h3><i class="fas fa-heart"></i> Tus intereses</h3>
+            <button class="modal-close" onclick="cerrarModal('modal-carrito')" style="position:static;"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body" id="cart-body"></div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total"><span>Total estimado</span><span id="cart-total">$0.00</span></div>
+            <div class="cart-actions">
+                <button class="btn-clear" onclick="vaciarCarrito()"><i class="fas fa-trash"></i> Vaciar</button>
+                <button class="btn-checkout" onclick="irAPedidos()"><i class="fas fa-file-invoice"></i> Solicitar información</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-msg">Vehículo agregado</span>
+</div>
+
+<script>
+    // ========== DATOS DE EJEMPLO (funciona offline / VS Code) ==========
+    const productos = [
+        {
+            id: 1,
+            nombre: "Toyota Corolla LE",
+            marca: "Toyota",
+            modelo: "Corolla",
+            anio: 2023,
+            tipo: "Sedán",
+            precio: 24500,
+            kilometraje: 18500,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Blanco Perla",
+            codigo: "TOY-COR-23-001",
+            descripcion: "Sedán confiable y eficiente. Excelente estado, un solo dueño, mantenimiento de agencia. Incluye cámara de reversa, Apple CarPlay y Android Auto.",
+            imagen: "https://images.unsplash.com/photo-1623869675781-80aa31012a5a?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 2,
+            nombre: "Honda CR-V EX-L",
+            marca: "Honda",
+            modelo: "CR-V",
+            anio: 2022,
+            tipo: "SUV",
+            precio: 28900,
+            kilometraje: 32000,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Gris Plata",
+            codigo: "HON-CRV-22-014",
+            descripcion: "SUV familiar espaciosa con techo panorámico, asientos de cuero y sistema Honda Sensing. Ideal para viajes largos y uso diario.",
+            imagen: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 3,
+            nombre: "Nissan Frontier PRO-4X",
+            marca: "Nissan",
+            modelo: "Frontier",
+            anio: 2024,
+            tipo: "Pickup",
+            precio: 36500,
+            kilometraje: 8500,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Negro",
+            codigo: "NIS-FRO-24-007",
+            descripcion: "Pickup todo terreno con paquete PRO-4X. Motor V6 potente, tracción 4x4 y capacidad de carga excepcional. Casi nueva.",
+            imagen: "https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 4,
+            nombre: "Ford Mustang GT",
+            marca: "Ford",
+            modelo: "Mustang",
+            anio: 2021,
+            tipo: "Coupé",
+            precio: 42500,
+            kilometraje: 27800,
+            transmision: "Manual",
+            combustible: "Gasolina",
+            color: "Rojo Racing",
+            codigo: "FOR-MUS-21-003",
+            descripcion: "Deportivo icónico con motor V8 5.0L. Escape deportivo, interior de cuero y paquete de performance. Emociones aseguradas.",
+            imagen: "https://images.unsplash.com/photo-1584345604476-8ec5f82d7228?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 5,
+            nombre: "Chevrolet Tahoe LT",
+            marca: "Chevrolet",
+            modelo: "Tahoe",
+            anio: 2022,
+            tipo: "SUV",
+            precio: 48900,
+            kilometraje: 41000,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Azul Marino",
+            codigo: "CHE-TAH-22-009",
+            descripcion: "SUV full-size de 7 plazas. Perfecta para familias grandes. Motor potente, espacio de carga enorme y tecnología de punta.",
+            imagen: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 6,
+            nombre: "Hyundai Tucson Limited",
+            marca: "Hyundai",
+            modelo: "Tucson",
+            anio: 2023,
+            tipo: "SUV",
+            precio: 27500,
+            kilometraje: 15200,
+            transmision: "Automática",
+            combustible: "Híbrido",
+            color: "Verde Oliva",
+            codigo: "HYU-TUC-23-021",
+            descripcion: "SUV híbrida moderna con diseño futurista. Bajo consumo, pantalla panorámica y gran equipamiento de seguridad.",
+            imagen: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 7,
+            nombre: "Kia Forte GT-Line",
+            marca: "Kia",
+            modelo: "Forte",
+            anio: 2024,
+            tipo: "Sedán",
+            precio: 21900,
+            kilometraje: 6200,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Gris Oscuro",
+            codigo: "KIA-FOR-24-012",
+            descripcion: "Sedán deportivo de entrada. Excelente relación calidad-precio, garantía de 5 años y diseño atractivo.",
+            imagen: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 8,
+            nombre: "Mazda CX-5 Signature",
+            marca: "Mazda",
+            modelo: "CX-5",
+            anio: 2023,
+            tipo: "SUV",
+            precio: 31200,
+            kilometraje: 19800,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Rojo Soul",
+            codigo: "MAZ-CX5-23-005",
+            descripcion: "SUV premium con acabados de lujo. Interior de cuero Nappa, audio Bose y manejo preciso característico de Mazda.",
+            imagen: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 9,
+            nombre: "Volkswagen Jetta SEL",
+            marca: "Volkswagen",
+            modelo: "Jetta",
+            anio: 2022,
+            tipo: "Sedán",
+            precio: 22800,
+            kilometraje: 29500,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Plata Reflex",
+            codigo: "VW-JET-22-018",
+            descripcion: "Sedán alemán confiable. Interior refinado, manejo estable y buen consumo de combustible.",
+            imagen: "https://images.unsplash.com/photo-1623869675781-80aa31012a5a?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 10,
+            nombre: "Toyota RAV4 XLE",
+            marca: "Toyota",
+            modelo: "RAV4",
+            anio: 2021,
+            tipo: "SUV",
+            precio: 26800,
+            kilometraje: 45600,
+            transmision: "Automática",
+            combustible: "Híbrido",
+            color: "Blanco",
+            codigo: "TOY-RAV-21-033",
+            descripcion: "SUV híbrida muy demandada. Excelente economía de combustible, tracción AWD y reputación de durabilidad Toyota.",
+            imagen: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 11,
+            nombre: "Honda Civic Sport",
+            marca: "Honda",
+            modelo: "Civic",
+            anio: 2024,
+            tipo: "Hatchback",
+            precio: 25500,
+            kilometraje: 4100,
+            transmision: "Manual",
+            combustible: "Gasolina",
+            color: "Azul Racing",
+            codigo: "HON-CIV-24-002",
+            descripcion: "Hatchback deportivo de última generación. Diseño agresivo, tecnología Honda Sensing y gran dinámica de manejo.",
+            imagen: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            id: 12,
+            nombre: "Ford F-150 XLT",
+            marca: "Ford",
+            modelo: "F-150",
+            anio: 2023,
+            tipo: "Pickup",
+            precio: 42900,
+            kilometraje: 22100,
+            transmision: "Automática",
+            combustible: "Gasolina",
+            color: "Gris Agate",
+            codigo: "FOR-F15-23-011",
+            descripcion: "La pickup más vendida de América. Cabina amplia, capacidad de remolque superior y tecnología avanzada de asistencia al conductor.",
+            imagen: "https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&q=80&w=800"
+        }
+    ];
+
+    let productosFiltrados = [...productos];
+    let carrito = JSON.parse(localStorage.getItem("carritoLegacyMotors")) || [];
+
+    function renderProductos(lista = productosFiltrados) {
+        const grid = document.getElementById("products-grid");
+        const info = document.getElementById("results-info");
+
+        if (lista.length === 0) {
+            grid.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <p>No se encontraron vehículos con esos criterios.</p>
+                    <p style="margin-top:0.5rem;font-size:0.9rem;">Prueba con otra marca, modelo o tipo.</p>
+                </div>`;
+            info.textContent = "0 vehículos encontrados";
+            return;
+        }
+
+        grid.innerHTML = lista.map(p => `
+            <article class="product-card" onclick="verDetalle(${p.id})">
+                <img class="product-img" src="${p.imagen}" alt="${p.nombre}" loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400x300/1a1d26/94a3b8?text=Vehículo'">
+                <div class="product-info">
+                    <div class="product-category">${p.tipo}</div>
+                    <h3 class="product-title">${p.nombre}</h3>
+                    <div class="product-meta">${p.marca} · ${p.anio}</div>
+                    <div class="product-specs">
+                        <span><i class="fas fa-tachometer-alt"></i> ${p.kilometraje.toLocaleString()} km</span>
+                        <span><i class="fas fa-cog"></i> ${p.transmision}</span>
+                        <span><i class="fas fa-gas-pump"></i> ${p.combustible}</span>
+                    </div>
+                    <div class="product-bottom">
+                        <span class="product-price">$${p.precio.toLocaleString()}</span>
+                        <button class="add-cart" onclick="event.stopPropagation(); agregarCarrito(${p.id})" title="Agregar a intereses">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        `).join("");
+
+        info.textContent = lista.length === productos.length
+            ? `Mostrando todos los vehículos (${lista.length})`
+            : `${lista.length} vehículo${lista.length !== 1 ? "s" : ""} encontrado${lista.length !== 1 ? "s" : ""}`;
+    }
+
+    function buscarVehiculo() {
+        const marca = document.getElementById("marca").value.trim().toLowerCase();
+        const modelo = document.getElementById("modelo").value.trim().toLowerCase();
+        const anio = document.getElementById("anio").value;
+        const tipo = document.getElementById("tipo").value.trim().toLowerCase();
+
+        productosFiltrados = productos.filter(p => {
+            const matchMarca = !marca || p.marca.toLowerCase() === marca;
+            const matchModelo = !modelo || p.modelo.toLowerCase().includes(modelo) || p.nombre.toLowerCase().includes(modelo);
+            const matchAnio = !anio || (anio === "2019" ? p.anio <= 2019 : p.anio === Number(anio));
+            const matchTipo = !tipo || p.tipo.toLowerCase() === tipo;
+            return matchMarca && matchModelo && matchAnio && matchTipo;
+        });
+
+        renderProductos(productosFiltrados);
+        document.getElementById("productos").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function limpiarBusqueda() {
+        document.getElementById("marca").value = "";
+        document.getElementById("modelo").value = "";
+        document.getElementById("anio").value = "";
+        document.getElementById("tipo").value = "";
+        productosFiltrados = [...productos];
+        renderProductos();
+    }
+
+    document.getElementById("modelo").addEventListener("input", buscarVehiculo);
+    document.getElementById("marca").addEventListener("change", buscarVehiculo);
+    document.getElementById("anio").addEventListener("change", buscarVehiculo);
+    document.getElementById("tipo").addEventListener("change", buscarVehiculo);
+
+    function verDetalle(id) {
+        const p = productos.find(prod => prod.id === id);
+        if (!p) return;
+
+        document.getElementById("detail-content").innerHTML = `
+            <img class="detail-img" src="${p.imagen}" alt="${p.nombre}"
+                 onerror="this.src='https://via.placeholder.com/400x300/1a1d26/94a3b8?text=Vehículo'">
+            <div class="detail-info">
+                <div class="detail-category">${p.tipo}</div>
+                <h2 class="detail-title">${p.nombre}</h2>
+                <div class="detail-code">Código: ${p.codigo}</div>
+                <div class="detail-fit">
+                    <i class="fas fa-calendar"></i> ${p.anio} &nbsp;·&nbsp;
+                    <i class="fas fa-tachometer-alt"></i> ${p.kilometraje.toLocaleString()} km &nbsp;·&nbsp;
+                    ${p.transmision} · ${p.combustible}
+                </div>
+                <p class="detail-desc">${p.descripcion}<br><br>
+                    <strong>Color:</strong> ${p.color}
+                </p>
+                <div class="detail-price">$${p.precio.toLocaleString()}</div>
+                <button class="btn-add-detail" onclick="agregarCarrito(${p.id}); cerrarModal('modal-detalle')">
+                    <i class="fas fa-heart"></i> Agregar a intereses
+                </button>
+            </div>
+        `;
+        abrirModal("modal-detalle");
+    }
+
+    function guardarCarrito() {
+        localStorage.setItem("carritoLegacyMotors", JSON.stringify(carrito));
+    }
+
+    function actualizarContador() {
+        document.getElementById("cart-count").textContent = carrito.length;
+    }
+
+    function agregarCarrito(id) {
+        const p = productos.find(prod => prod.id === id);
+        if (!p) return;
+
+        // Evitar duplicados
+        if (carrito.some(item => item.id === p.id)) {
+            mostrarToast("Este vehículo ya está en tus intereses");
+            return;
+        }
+
+        carrito.push({
+            id: p.id,
+            nombre: p.nombre,
+            precio: p.precio,
+            codigo: p.codigo,
+            anio: p.anio,
+            marca: p.marca
+        });
+        guardarCarrito();
+        actualizarContador();
+        mostrarToast(`${p.nombre} agregado a intereses`);
+    }
+
+    function eliminarDelCarrito(index) {
+        const eliminado = carrito[index];
+        carrito.splice(index, 1);
+        guardarCarrito();
+        actualizarContador();
+        renderCarrito();
+        mostrarToast(`${eliminado.nombre} eliminado`);
+    }
+
+    function vaciarCarrito() {
+        if (carrito.length === 0) return;
+        if (confirm("¿Vaciar todos los intereses?")) {
+            carrito = [];
+            guardarCarrito();
+            actualizarContador();
+            renderCarrito();
+            mostrarToast("Lista de intereses vaciada");
+        }
+    }
+
+    function renderCarrito() {
+        const body = document.getElementById("cart-body");
+        const footer = document.getElementById("cart-footer");
+
+        if (carrito.length === 0) {
+            body.innerHTML = `<div class="cart-empty"><i class="fas fa-heart"></i><p>No tienes vehículos de interés</p></div>`;
+            footer.style.display = "none";
+            return;
+        }
+
+        let total = 0;
+        body.innerHTML = carrito.map((item, index) => {
+            total += item.precio;
+            return `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.nombre} (${item.anio})</div>
+                        <div class="cart-item-price">$${item.precio.toLocaleString()}</div>
+                    </div>
+                    <button class="btn-remove" onclick="eliminarDelCarrito(${index})" title="Eliminar">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>`;
+        }).join("");
+
+        document.getElementById("cart-total").textContent = `$${total.toLocaleString()}`;
+        footer.style.display = "block";
+    }
+
+    function abrirCarrito() {
+        renderCarrito();
+        abrirModal("modal-carrito");
+    }
+
+    function irAPedidos() {
+        window.location.href = "pedidos.html";
+    }
+
+    function abrirModal(id) {
+        document.getElementById(id).classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function cerrarModal(id) {
+        document.getElementById(id).classList.remove("active");
+        document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+        overlay.addEventListener("click", e => {
+            if (e.target === overlay) {
+                overlay.classList.remove("active");
+                document.body.style.overflow = "";
+            }
+        });
+    });
+
+    function mostrarToast(mensaje) {
+        const toast = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = mensaje;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    // Inicialización
+    renderProductos();
+    actualizarContador();
+</script>
+</body>
+</html>

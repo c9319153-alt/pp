@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Motors - Solicitar información</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #433d97;
+            --primary-hover: #5149b0;
+            --bg-dark: #0f1117;
+            --bg-card: #1a1d26;
+            --bg-input: #252936;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #2e3445;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+            background: rgba(15, 17, 23, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i,
+        .logo span {
+            color: var(--primary);
+        }
+
+        .back {
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            padding: .65rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back:hover {
+            border-color: var(--primary);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.4rem;
+            margin-bottom: .5rem;
+        }
+
+        .page-title h1 span {
+            color: var(--primary);
+        }
+
+        .page-title p {
+            color: var(--text-muted);
+        }
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .card h2 {
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: .4rem;
+            font-weight: 600;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: .85rem 1rem;
+            background: var(--bg-input);
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: .9rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-item small {
+            color: var(--text-muted);
+        }
+
+        .empty {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.2rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .total span:last-child {
+            color: var(--success);
+        }
+
+        .btn-order {
+            width: 100%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-order:hover {
+            background: var(--primary-hover);
+        }
+
+        .clear-btn {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-light);
+            padding: .8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: .7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .clear-btn:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 3rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 750px) {
+            .order-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-car"></i>
+            <span>Legacy</span> Motors
+        </a>
+
+        <a href="index.html" class="back">
+            <i class="fas fa-arrow-left"></i>
+            Volver al catálogo
+        </a>
+    </nav>
+</header>
+
+<main>
+    <div class="page-title">
+        <h1>Solicitar <span>información</span></h1>
+        <p>Completa tus datos y te contactaremos sobre los vehículos de tu interés.</p>
+    </div>
+
+    <div class="order-grid">
+
+        <section class="card">
+            <h2><i class="fas fa-user"></i> Datos del cliente</h2>
+
+            <form id="pedidoForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono / WhatsApp</label>
+                    <input type="tel" id="telefono" required placeholder="Ej. 7000-0000">
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" required placeholder="Ej. correo@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion">Ciudad / Zona de interés</label>
+                    <textarea id="direccion" required placeholder="Ciudad o zona donde te gustaría ver el vehículo o recibir información"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="pago">Forma de pago preferida</label>
+                    <select id="pago" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="Contado">Contado / Transferencia</option>
+                        <option value="Financiamiento">Financiamiento bancario</option>
+                        <option value="Crédito">Crédito con la agencia</option>
+                        <option value="Otro">Otra (especificar en mensaje)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">Mensaje adicional (opcional)</label>
+                    <textarea id="mensaje" placeholder="¿Quieres agendar una cita? ¿Tienes preguntas específicas?"></textarea>
+                </div>
+
+                <button type="submit" class="btn-order">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar solicitud
+                </button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2><i class="fas fa-heart"></i> Vehículos de interés</h2>
+
+            <div id="listaPedido"></div>
+
+            <div class="total">
+                <span>Total estimado</span>
+                <span id="totalPedido">$0</span>
+            </div>
+
+            <button class="clear-btn" onclick="vaciarCarrito()">
+                <i class="fas fa-trash"></i>
+                Vaciar lista
+            </button>
+        </section>
+
+    </div>
+</main>
+
+<footer>
+    <strong>Legacy Motors</strong>
+    <p>Tu próximo automóvil te está esperando</p>
+    <p>© 2026 Legacy Motors</p>
+</footer>
+
+<script>
+    let carrito = JSON.parse(localStorage.getItem("carritoLegacyMotors")) || [];
+
+    function mostrarPedido() {
+        const lista = document.getElementById("listaPedido");
+        const totalElemento = document.getElementById("totalPedido");
+
+        lista.innerHTML = "";
+        let total = 0;
+
+        if (carrito.length === 0) {
+            lista.innerHTML = '<div class="empty">No hay vehículos seleccionados.<br>Regresa al catálogo para agregar vehículos de interés.</div>';
+            totalElemento.textContent = "$0";
+            return;
+        }
+
+        carrito.forEach(function(producto, index) {
+            total += Number(producto.precio);
+
+            lista.innerHTML += `
+                <div class="order-item">
+                    <div>
+                        <strong>${producto.nombre}</strong><br>
+                        <small>${producto.marca || ''} · ${producto.anio || ''} · Código: ${producto.codigo || ''}</small>
+                    </div>
+                    <strong>$${Number(producto.precio).toLocaleString()}</strong>
+                </div>
+            `;
+        });
+
+        totalElemento.textContent = "$" + total.toLocaleString();
+    }
+
+    function vaciarCarrito() {
+        if (carrito.length === 0) return;
+
+        if (confirm("¿Seguro que quieres vaciar la lista de intereses?")) {
+            carrito = [];
+            localStorage.removeItem("carritoLegacyMotors");
+            mostrarPedido();
+        }
+    }
+
+    // ========== ENVÍO (simulado para funcionar offline / VS Code) ==========
+    // Si más adelante quieres conectar a Google Sheets, reemplaza esta función
+    // por una llamada fetch a tu URL de Apps Script (igual que antes).
+
+    async function enviarPedido(datos) {
+        // Simulación de envío exitoso (funciona sin internet ni backend)
+        console.log("Datos de la solicitud:", datos);
+
+        // Pequeña espera para simular red
+        await new Promise(r => setTimeout(r, 800));
+
+        alert("¡Solicitud enviada correctamente!\n\nNos pondremos en contacto contigo pronto.\n\n(En esta versión de demostración los datos se muestran en la consola del navegador)");
+        
+        carrito = [];
+        localStorage.removeItem("carritoLegacyMotors");
+        mostrarPedido();
+        document.getElementById("pedidoForm").reset();
+    }
+
+    document.getElementById("pedidoForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        if (carrito.length === 0) {
+            alert("Agrega al menos un vehículo de interés antes de enviar la solicitud.");
+            return;
+        }
+
+        const nombre = document.getElementById("nombre").value.trim();
+        const telefono = document.getElementById("telefono").value.trim();
+        const correo = document.getElementById("correo").value.trim();
+        const direccion = document.getElementById("direccion").value.trim();
+        const pago = document.getElementById("pago").value;
+        const mensaje = document.getElementById("mensaje").value.trim();
+
+        let total = carrito.reduce(function(suma, producto) {
+            return suma + Number(producto.precio);
+        }, 0);
+
+        const datosPedido = {
+            nombre: nombre,
+            telefono: telefono,
+            correo: correo,
+            direccion: direccion,
+            pago: pago,
+            mensaje: mensaje,
+            total: total,
+            productos: carrito
+        };
+
+        enviarPedido(datosPedido);
+    });
+
+    mostrarPedido();
+</script>
+
+</body>
+</html>
